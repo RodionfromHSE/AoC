@@ -49,11 +49,7 @@ fun main() {
         return ans
     }
 
-    fun part2(input: List<String>) = input.map {pair -> RPSplay(pair.split(' '))}.sum()
-
-//     test if implementation meets criteria from the description, like:
-//    val testInput = readInput("Day01_test")
-//    check(part1(testInput) == 1)
+    fun part2(input: List<String>) = input.map {pair -> RPSplay2(pair.split(' '))}.sum()
 
     val input = readInput("Day02")
     part1(input).println()
