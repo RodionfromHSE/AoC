@@ -1,45 +1,33 @@
+private const val DAY = 4
+
 fun main() {
-    fun part1(input: List<String>): Int {
-        var elfNumber = 0
-        val ans = input.groupBy {
-            if (it == "")
-                elfNumber += 1
-            elfNumber
-        }.values.map { elf ->
-            elf.filter { el ->
-                el != ""
-            }.map {
-                it.toInt()
-            }
-        }.maxOfOrNull { elf ->
-            elf.sum()
+
+    fun isFullyIn(firstPair: List<Int>, secondPair: List<Int>) =
+        firstPair.all { it in secondPair.first()..secondPair.last() }
+
+    fun isIntersected(firstPair: List<Int>, secondPair: List<Int>) =
+        firstPair.any { it in secondPair.first()..secondPair.last() }
+
+    fun isContained(l: String, checker: (List<Int>, List<Int>) -> Boolean = ::isFullyIn): Boolean {
+        // Split the input string on the comma character
+        val pairs = l.split(",")
+
+        // Iterate over the pairs and extract the integers
+        val (first, second) = pairs.map { pair ->
+            // Use a regular expression to split the pair on the dash character
+            val (a, b) = Regex("-").split(pair)
+
+            // Parse the integers using the toInt function
+            listOf(a.toInt(), b.toInt())
         }
-        return ans!!
+        return checker(first, second) || checker(second, first)
     }
 
-    fun part2(input: List<String>): Int {
-        var elfNumber = 0
-        val ans = input.groupBy {
-            if (it == "")
-                elfNumber += 1
-            elfNumber
-        }.values.map { elf ->
-            elf.filter { el ->
-                el != ""
-            }.map {
-                it.toInt()
-            }
-        }.map { elf ->
-            elf.sum()
-        }.sortedDescending().take(3).sum()
-        return ans
-    }
+    fun part1(input: List<String>) = input.count(::isContained)
 
-//     test if implementation meets criteria from the description, like:
-//    val testInput = readInput("Day01_test")
-//    check(part1(testInput) == 1)
+    fun part2(input: List<String>) = input.count {isContained(it, ::isIntersected)}
 
-    val input = readInput("Day01")
+    val input = readInput("Day0${DAY}")
     part1(input).println()
     part2(input).println()
 }

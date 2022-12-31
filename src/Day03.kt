@@ -1,45 +1,27 @@
+private const val DAY = 3
+
 fun main() {
-    fun part1(input: List<String>): Int {
-        var elfNumber = 0
-        val ans = input.groupBy {
-            if (it == "")
-                elfNumber += 1
-            elfNumber
-        }.values.map { elf ->
-            elf.filter { el ->
-                el != ""
-            }.map {
-                it.toInt()
-            }
-        }.maxOfOrNull { elf ->
-            elf.sum()
-        }
-        return ans!!
+    fun priority(c: Char) = if (c.isUpperCase()) c - 'A' + 27 else c - 'a' + 1
+
+    fun solve(l: String) : Int {
+        val n = l.length
+        val c = l.subSequence(0, n/2).toSet().intersect(l.subSequence(n/2, n).toSet()).first()
+        return priority(c)
     }
 
-    fun part2(input: List<String>): Int {
-        var elfNumber = 0
-        val ans = input.groupBy {
-            if (it == "")
-                elfNumber += 1
-            elfNumber
-        }.values.map { elf ->
-            elf.filter { el ->
-                el != ""
-            }.map {
-                it.toInt()
-            }
-        }.map { elf ->
-            elf.sum()
-        }.sortedDescending().take(3).sum()
-        return ans
+    fun solve2(triple: List<String>) : Int {
+        require(triple.size == 3)
+        val intersected = triple.first().filter {c -> triple.all { c in it}}
+        return priority(intersected.first())
     }
 
-//     test if implementation meets criteria from the description, like:
-//    val testInput = readInput("Day01_test")
-//    check(part1(testInput) == 1)
+    fun part1(input: List<String>) = input.map(::solve).sum()
 
-    val input = readInput("Day01")
+    fun part2(input: List<String>) = input.chunked(3)
+        .map(::solve2)
+        .sum()
+
+    val input = readInput("Day0${DAY}")
     part1(input).println()
     part2(input).println()
 }

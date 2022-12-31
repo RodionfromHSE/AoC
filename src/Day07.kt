@@ -1,45 +1,36 @@
+private const val DAY = 7
+
+class System(root: String) {
+    var cwd = Node.Directory(root, null)
+
+    fun processLs(nodes: List<Node>) = cwd.children.addAll(nodes)
+
+    fun processCd(to: String) {
+        cwd = if (to == "..")
+            cwd.parent
+        else
+            cwd.children.findLast { it.name == to } as Node.Directory
+    }
+
+    sealed class Node(val name: String, private val size: Int) {
+        class Directory(name: String, parent: Directory?, size: Int = -1) : Node(name, size) {
+            val parent = parent ?: this
+            val children = mutableListOf<Node>()
+        }
+        class File(name: String, size: Int) : Node(name, size)
+    }
+}
+
 fun main() {
     fun part1(input: List<String>): Int {
-        var elfNumber = 0
-        val ans = input.groupBy {
-            if (it == "")
-                elfNumber += 1
-            elfNumber
-        }.values.map { elf ->
-            elf.filter { el ->
-                el != ""
-            }.map {
-                it.toInt()
-            }
-        }.maxOfOrNull { elf ->
-            elf.sum()
-        }
-        return ans!!
+        TODO("not implemented")
     }
 
     fun part2(input: List<String>): Int {
-        var elfNumber = 0
-        val ans = input.groupBy {
-            if (it == "")
-                elfNumber += 1
-            elfNumber
-        }.values.map { elf ->
-            elf.filter { el ->
-                el != ""
-            }.map {
-                it.toInt()
-            }
-        }.map { elf ->
-            elf.sum()
-        }.sortedDescending().take(3).sum()
-        return ans
+        TODO("not implemented")
     }
 
-//     test if implementation meets criteria from the description, like:
-//    val testInput = readInput("Day01_test")
-//    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
+    val input = readInput("Day0${DAY}")
     part1(input).println()
     part2(input).println()
 }
